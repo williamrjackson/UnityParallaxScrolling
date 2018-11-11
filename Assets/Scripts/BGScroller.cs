@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BGScroller : MonoBehaviour {
+    public string sortingLayer = "Default";
     public ScrollImage[] scrollImages;
     private Vector3 m_InitialPosition;
 	// Use this for initialization
 	void Start () {
         m_InitialPosition = transform.position;
+        SetSortingLayer();
 	}
 
     // Update is called once per frame
@@ -19,7 +21,21 @@ public class BGScroller : MonoBehaviour {
             image.quad.GetComponent<Renderer>().material.SetTextureOffset("_MainTex", new Vector2(x,y));
         }
 	}
+    public void OnValidate()
+    {
+        SetSortingLayer();
+    }
+
+    private void SetSortingLayer()
+    {
+        foreach (ScrollImage image in scrollImages)
+        {
+            MeshRenderer rend = image.quad.GetComponent<MeshRenderer>();
+            rend.sortingLayerName = sortingLayer;
+        }
+    }
 }
+
 [System.Serializable]
 public struct ScrollImage
 {
